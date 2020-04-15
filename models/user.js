@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    name:{
+    firstName:{
         type: String,
         maxlength: 50
     },
-    lastname: {
+    lastName: {
         type: String,
         maxlength: 50
     },
@@ -31,5 +31,4 @@ const userSchema = mongoose.Schema({
 });
 
 const User = mongoose.model('User', userSchema);
-
-module.exports = {User}
+module.exports = { User };
