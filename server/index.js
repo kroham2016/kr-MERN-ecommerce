@@ -63,9 +63,7 @@ app.post('/api/user/login', (req,res) =>{
 })
 
 app.get('/', (req,res) => {
-    res.json({
-        "message" : "Hello World"
-    })
+    res.send('~~Hello from default page');
 })
 
 app.get('/api/user/auth', auth, (req,res) => {
