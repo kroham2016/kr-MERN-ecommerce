@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import {loginUser} from '../../actions/user_actions'
-class RegisterLogin extends Component {
+import {Link} from 'react-router-dom';
+
+class Login extends Component {
     
     state = {
         email: "",
         password: "",
-        errors: ['1','2','3']
+        errors: []
     };
 
 handleChange = event => {
@@ -40,9 +42,8 @@ submitForm = event => {
 
 isFormValid =({email,password}) => email && password;
 
-displayErrors = errors => {
-    errors.map((error,i) => <p key={i}>{error}</p>)
-}
+displayErrors = errors => errors.map((error,i) => <p key={i}>{error}</p>)
+
 
 render() {
 return (
@@ -59,8 +60,9 @@ return (
                     className="validate" //from materialize css, validates the email
                     value={this.state.email} 
                     onChange={e=> this.handleChange(e)}
+                    autoComplete="e-mail"
                     />
-                    <label htmlFor='email'>Email</label>
+                    <label className="active" htmlFor='email'>Email</label>
                     <span 
                         className='helper-text' 
                         data-error='wrong' 
@@ -78,8 +80,9 @@ return (
                         className='validate'
                         value={this.state.password}
                         onChange={e=> this.handleChange(e)}
+                        autoComplete="current-password"
                     />
-                    <label htmlFor='email'>Password</label>
+                    <label className="active" htmlFor='password'>Password</label>
                     <span 
                         className='helper-text' 
                         data-error='wrong' 
@@ -88,20 +91,28 @@ return (
                 </div>
             </div>
             {this.state.errors.length > 0 && (
-                <div>
+                <div className='row'>
                     {this.displayErrors(this.state.errors)}
                 </div>
             )}
             <div className="row">
                 <div className="col s12">
                     <button
-                        className='btn waves-effect red lighten-2'
+                        className='btn waves-effect waves-light teal lighten'
                         type='submit'
                         name='action'
                         onClick={this.submitForm}
                     >
                         Login
+                    </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Link to='/register'>
+                    <button
+                        className='btn waves-effect waves-light teal lighten'
+                        type='button'
+                    >
+                        Register
                     </button>
+                    </Link>
                 </div>
             </div>
 
@@ -117,4 +128,4 @@ function mapStateToProps(state){
         user: state.user
     }
 }
-export default connect(mapStateToProps)(RegisterLogin);
+export default connect(mapStateToProps)(Login);
