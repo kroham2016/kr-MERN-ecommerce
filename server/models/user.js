@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = 10;
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 const userSchema = mongoose.Schema({
     firstName:{
@@ -30,7 +31,8 @@ const userSchema = mongoose.Schema({
     },
     tokenExp: {
         type: Number
-    }
+    },
+    image: String
 });
 
 userSchema.pre('save', function(next){
@@ -40,7 +42,6 @@ userSchema.pre('save', function(next){
 
         bcrypt.genSalt(SALT_ROUNDS, function(err,salt){
             if(err) return next(err);
-
             bcrypt.hash(user.password, salt, function(err,hash){
                 if(err) return next(err);
                 user.password = hash ;
@@ -62,9 +63,12 @@ userSchema.methods.comparePassword = function(plainPassword, cb) {
 userSchema.methods.generateToken = function(cb){
     var user = this;
     var token = jwt.sign(user._id.toHexString(), 'secret');
+    var oneHour = moment().add(1,'hour').valueOf();
 
     user.token = token;
-    user.save((err,user) => {
+    user.tokenExp = oneHour;
+
+    user.save(function (err,user){
         if(err) return cb(err);
         cb(null,user);
     })
